@@ -1,0 +1,26 @@
+version: 1
+
+
+version: 1
+template_path: template
+
+project_name: "nginx-example"
+launch_type: EC2
+
+task_definition:
+  ecs_network_mode: bridge
+  services:
+    web:
+      essential: true
+
+service_definition:
+  region: ap-northeast-1
+  cluster_name: ""
+  load_balancers:
+    - target_group_arn: ""
+      container_name: web
+      container_port: 80
+  deployment_configuration:
+    maximum_percent: 200
+    minimum_healthy_percent: 100
+  health_check_grace_period: 10

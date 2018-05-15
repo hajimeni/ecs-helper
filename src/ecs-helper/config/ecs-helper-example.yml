@@ -1,0 +1,50 @@
+version: 1
+
+template_path: template
+# template_url: url
+
+project_name: "example"
+launch_type: EC2
+
+# optionで指定するようにする
+# timeout: 10
+
+## この内容から ecs-params や docker-compose.infra.yml を生成する
+task_definition:
+#  ecs_network_mode: bridge
+#  task_role_arn: string
+#  task_execution_role: string
+  services:
+    play:
+      essential: true
+      monitoring_type: jolokia
+      logging_type: fluentd_local
+    nginx:
+      essential: true
+      monitoring_type: nginx
+      logging_type: fluentd_local
+
+## Fargateのときは以下も必要(未対応)
+#run_params:
+#  network_configuration:
+#    awsvpc_configuration:
+#      subnets:
+#        - subnet_id1
+#        - subnet_id2
+#      security_groups:
+#        - secgroup_id1
+#        - secgroup_id2
+#      assign_public_ip: ENABLED
+
+service_definition:
+  region: ap-northeast-1
+  cluster_name: cluster-example
+# load_balancers:
+#   load_balancer_name: aaa
+#   target_group_arn: bbb
+#   container_name: ccc
+#   container_port: ddd
+  deployment_configuration:
+    maximum_percent: 100
+    minimum_healthy_percent: 0
+  health_check_grace_period: 10

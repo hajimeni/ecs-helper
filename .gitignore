@@ -1,0 +1,7 @@
+bin
+.bin
+.idea
+vendor
+.DS_Store
+github.com
+pkg
