@@ -63,6 +63,9 @@ func Deploy(cmdOpts *config.DeployCmdOptions, globalOpts *config.CmdOptions) (in
         args = append(args, "--container-name", *lb.ContainerName)
         args = append(args, "--container-port", strconv.Itoa(*lb.ContainerPort))
     }
+    if helperConfig.LaunchType != "" {
+        args = append(args, "--launch-type", helperConfig.LaunchType)
+    }
     //args = append(args, "--create-log-groups")
     args = append(args, "--force-deployment")
 
@@ -71,7 +74,7 @@ func Deploy(cmdOpts *config.DeployCmdOptions, globalOpts *config.CmdOptions) (in
 
 func generateEcsParamYaml(helperConfig *config.EcsHeplerConfig, dir string) string {
     configBytes, _ := yaml.Marshal(helperConfig)
-    ecsParams := EcsParamsWrapper{}
+    ecsParams := config.EcsParamsWrapper{}
     yaml.Unmarshal(configBytes, &ecsParams)
 
     ecsParamsBytes, _ := yaml.Marshal(ecsParams)

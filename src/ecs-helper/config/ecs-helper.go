@@ -6,17 +6,14 @@ import (
     "log"
 )
 
-type ServiceConfig struct {
-    MonitoringType string `yaml:"monitoring_type"`
-    LoggingType string `yaml:"logging_type"`
-    Essential bool
-}
+type EcsHeplerConfig struct {
+    Version int
+    ProjectName string `yaml:"project_name"`
+    LaunchType string `yaml:"launch_type"`
 
-type TaskDefinition struct {
-    EcsNetworkMode string `yaml:"ecs_network_mode"`
-    TaskRoleArn *string `yaml:"task_role_arn,omitempty"`
-    TaskExecutionRole *string `yaml:"task_execution_role,omitempty"`
-    Services map[string]ServiceConfig
+    TaskDefinition TaskDefinition `yaml:"task_definition"`
+    ServiceDefinition ServiceDefinition `yaml:"service_definition"`
+    RunParams RunParams `yaml:"run_params,omitempty"`
 }
 
 type LoadbalancerConfig struct {
@@ -42,17 +39,6 @@ type ServiceDefinition struct {
     HealthCheckGracePeriod int `yaml:"health_check_grace_period"`
 }
 
-type EcsHeplerConfig struct {
-    Version int
-    TemplatePath string `yaml:"template_path"`
-    ProjectName string `yaml:"project_name"`
-    LaunchType string `yaml:"launch_type"`
-
-    TaskDefinition TaskDefinition `yaml:"task_definition"`
-    ServiceDefinition ServiceDefinition `yaml:"service_definition"`
-
-}
-
 func (e *EcsHeplerConfig) ToString() string {
     out, _ := yaml.Marshal(e)
     return string(out)
@@ -63,20 +49,7 @@ func LoadEcsHelperConfig(path string) (*EcsHeplerConfig, error) {
     if err != nil {
         return nil, err
     }
-    out := EcsHeplerConfig{
-        TemplatePath: "templage",
-        LaunchType: "EC2",
-        ServiceDefinition: ServiceDefinition{
-            DeploymentConfiguration: DeploymentConfiguration{
-                MaximumPercent: 200,
-                MinimumHealthyPercent: 100,
-            },
-            HealthCheckGracePeriod: 10,
-        },
-        TaskDefinition: TaskDefinition{
-            EcsNetworkMode: "bridge",
-        },
-    }
+    out := EcsHeplerConfig{}
     yaml.Unmarshal(fileBytes, &out)
     log.Println("ecs helper config\n---", string(fileBytes))
     return &out, nil

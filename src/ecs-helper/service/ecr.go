@@ -140,7 +140,7 @@ func printImageContent(w *tabwriter.Writer, cnt *int, args ...string) {
 
 
 func CreateEcrRepository(opt config.EcrCreteCmdOptions) error {
-    if opt.Name != "" {
+    if opt.Name == "" {
         return errors.New("Repository name is required")
     }
 
