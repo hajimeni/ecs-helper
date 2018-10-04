@@ -3,9 +3,9 @@ ecs-helper
 
 ## Latest version
 
-- `v0.1.0`
-  - (Download (for macOS))[https://github.com/hajimeni/ecs-helper/releases/download/v0.1.0/ecs-helper-darwin-amd64.tar.gz]
-  - (Download (for Linux))[https://github.com/hajimeni/ecs-helper/releases/download/v0.1.0/ecs-helper-linux-amd64.tar.gz]
+- `v0.2.0`
+  - (Download (for macOS))[https://github.com/hajimeni/ecs-helper/releases/download/v0.2.0/ecs-helper-darwin-amd64.tar.gz]
+  - (Download (for Linux))[https://github.com/hajimeni/ecs-helper/releases/download/v0.2.0/ecs-helper-linux-amd64.tar.gz]
 
 ## Usage
 
