@@ -1,9 +1,9 @@
 package service
 
 import (
+    "ecs-helper/option"
     "github.com/aws/aws-sdk-go/aws"
     "github.com/aws/aws-sdk-go/aws/session"
-    "ecs-helper/config"
     "fmt"
     "strings"
     "text/tabwriter"
@@ -14,7 +14,7 @@ import (
     "errors"
 )
 
-func ListEcrRepositories(opt config.EcrListCmdOptions) error {
+func ListEcrRepositories(opt option.EcrListCmdOptions) error {
     repositories, err := listRepositories(opt)
     if err != nil {
         fmt.Println(err)
@@ -29,7 +29,7 @@ func ListEcrRepositories(opt config.EcrListCmdOptions) error {
     return nil
 }
 
-func listRepositories(opt config.EcrListCmdOptions) ([]*ecr.Repository, error) {
+func listRepositories(opt option.EcrListCmdOptions) ([]*ecr.Repository, error) {
     awsConfig := aws.Config{}
     if opt.Region != "" {
         awsConfig.WithRegion(opt.Region)
@@ -56,7 +56,7 @@ func listRepositories(opt config.EcrListCmdOptions) ([]*ecr.Repository, error) {
 }
 
 
-func ListEcrImages(opt config.EcrImagesCmdOptions) error {
+func ListEcrImages(opt option.EcrImagesCmdOptions) error {
     awsConfig := aws.Config{}
     if opt.Region != "" {
         awsConfig.WithRegion(opt.Region)
@@ -64,7 +64,7 @@ func ListEcrImages(opt config.EcrImagesCmdOptions) error {
     sess := session.Must(session.NewSession(&awsConfig))
     svc := ecr.New(sess)
 
-    repositories, err := listRepositories(config.EcrListCmdOptions{
+    repositories, err := listRepositories(option.EcrListCmdOptions{
         Name: opt.Name,
         Region: opt.Region,
     })
@@ -139,7 +139,7 @@ func printImageContent(w *tabwriter.Writer, cnt *int, args ...string) {
 }
 
 
-func CreateEcrRepository(opt config.EcrCreteCmdOptions) error {
+func CreateEcrRepository(opt option.EcrCreteCmdOptions) error {
     if opt.Name == "" {
         return errors.New("Repository name is required")
     }

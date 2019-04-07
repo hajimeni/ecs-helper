@@ -1,50 +1,110 @@
 version: 1
+project_name: string
+region: string
 
-template_path: template
-# template_url: url
-
-project_name: "example"
-launch_type: EC2
-
-# optionで指定するようにする
-# timeout: 10
-
-## この内容から ecs-params や docker-compose.infra.yml を生成する
-task_definition:
-#  ecs_network_mode: bridge
-#  task_role_arn: string
-#  task_execution_role: string
-  services:
-    play:
-      essential: true
-      monitoring_type: jolokia
-      logging_type: fluentd_local
-    nginx:
-      essential: true
-      monitoring_type: nginx
-      logging_type: fluentd_local
-
-## Fargateのときは以下も必要(未対応)
-#run_params:
-#  network_configuration:
-#    awsvpc_configuration:
-#      subnets:
-#        - subnet_id1
-#        - subnet_id2
-#      security_groups:
-#        - secgroup_id1
-#        - secgroup_id2
-#      assign_public_ip: ENABLED
-
+# like service definition
 service_definition:
-  region: ap-northeast-1
-  cluster_name: cluster-example
-# load_balancers:
-#   load_balancer_name: aaa
-#   target_group_arn: bbb
-#   container_name: ccc
-#   container_port: ddd
+  cluster: string
+  task_definition: string
+  load_balancers:
+    target_group_arn: string
+    load_balancer_name: string
+    container_name: string
+    container_port: 100
+  launch_type: string
+  role: string
   deployment_configuration:
     maximum_percent: 100
-    minimum_healthy_percent: 0
-  health_check_grace_period: 10
+    minimum_healthy_percent: 50
+  placement_constraints:
+    - type: string
+      expression: string
+  placement_strategy:
+    - type: string
+      field: string
+  health_check_grace_period_seconds: integer
+  scheduling_strategy: string
+  deployment_controller:
+    type: string
+  tags:
+    - key: hoge
+      value: futa
+    - key: foo
+      value: bar
+  enable_ecs_managed_tags: true
+  propagate_tags: "TASK_DEFINITION"
+
+## equals to ecs_params
+ecs_params:
+  version: 1
+  task_definition:
+    ecs_network_mode: string
+    task_role_arn: string
+    task_execution_role: string
+    task_size:
+      cpu_limit: string
+      mem_limit: string
+    pid_mode: string
+    ipc_mode: string
+    services:
+      <service_name>:
+        essential: boolean
+        repository_credentials:
+          credentials_parameter: string
+        cpu_shares: integer
+        mem_limit: string
+        mem_reservation: string
+        healthcheck:
+          test: ["CMD", "curl -f http://localhost"]
+          interval: string
+          timeout: string
+          retries: integer
+          start_period: string
+        secrets:
+          - value_from: string
+            name: string
+    docker_volumes:
+        - name: string
+          scope: string
+          autoprovision:
+          driver: string
+          driver_opts: boolean
+             string: string
+          labels:
+             string: string
+  run_params:
+    network_configuration:
+      awsvpc_configuration:
+        subnets:
+          - subnet_id1
+          - subnet_id2
+        security_groups:
+          - secgroup_id1
+          - secgroup_id2
+        assign_public_ip: ENABLED
+    task_placement:
+      strategy:
+        - type: string
+          field: string
+      constraints:
+        - type: string
+           expression: string
+    service_discovery:
+      container_name: string
+      container_port: integer
+      private_dns_namespace:
+          vpc: string
+          id: string
+          name: string
+          description: string
+      public_dns_namespace:
+          id: string
+          name: string
+      service_discovery_service:
+          name: string
+          description: string
+          dns_config:
+            type: string
+            ttl: integer
+          healthcheck_custom_config:
+            failure_threshold: integer

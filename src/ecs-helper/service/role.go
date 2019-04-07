@@ -1,19 +1,19 @@
 package service
 
 import (
+    "ecs-helper/option"
+    "encoding/json"
+    "fmt"
     "github.com/aws/aws-sdk-go/aws"
     "github.com/aws/aws-sdk-go/aws/session"
-    "ecs-helper/config"
-    "fmt"
-    "strings"
     "github.com/aws/aws-sdk-go/service/iam"
     "net/url"
-    "encoding/json"
     "os"
+    "strings"
     "text/tabwriter"
 )
 
-func ListTaskRoles(opt config.RoleListCmdOptions) error {
+func ListTaskRoles(opt option.RoleListCmdOptions) error {
     awsConfig := aws.Config{}
     sess := session.Must(session.NewSession(&awsConfig))
     svc := iam.New(sess)

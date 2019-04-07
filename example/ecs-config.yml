@@ -1,0 +1,22 @@
+version: 1
+
+project_name: "nginx-example"
+region: ap-northeast-1
+
+service_definition:
+  cluster: dmt-infra-cluster
+  launch_type: FARGATE
+  deployment_configuration:
+    maximum_percent: 200
+    minimum_healthy_percent: 100
+  health_check_grace_period: 10
+
+ecs_params:
+  version: 1
+  task_definition:
+    task_size:
+      cpu_limit: 256
+      mem_limit: 1024
+    services:
+      web:
+        essential: true

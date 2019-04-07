@@ -1,16 +1,17 @@
 package wrapper
 
 import (
-"os/exec"
-"bufio"
-"errors"
-"net/http"
-"path/filepath"
-"os"
-"io"
-"log"
-"syscall"
-"runtime"
+    "bufio"
+    "errors"
+    "fmt"
+    "io"
+    "log"
+    "net/http"
+    "os"
+    "os/exec"
+    "path/filepath"
+    "runtime"
+    "syscall"
 )
 
 const EcsCliCommand = "ecs-cli"
@@ -65,9 +66,9 @@ func ExecuteEcsCli(args []string) (int, error) {
         case <- stdoutDoneChan:
             stillGoing = false
         case line := <-stdoutOutputChan:
-            log.Println(line)
+            fmt.Println("\x1b[32m" + line + "\x1b[0m")
         case line := <-stderrOutputChan:
-            log.Println(line)
+            fmt.Println("\x1b[31m" + line + "\x1b[0m")
         }
     }
     err = ecsCmd.Wait()

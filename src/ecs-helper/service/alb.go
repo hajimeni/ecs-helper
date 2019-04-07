@@ -1,17 +1,17 @@
 package service
 
 import (
+    "ecs-helper/option"
+    "fmt"
     "github.com/aws/aws-sdk-go/aws"
     "github.com/aws/aws-sdk-go/aws/session"
-    "ecs-helper/config"
     "github.com/aws/aws-sdk-go/service/elbv2"
-    "fmt"
+    "os"
     "strings"
     "text/tabwriter"
-    "os"
 )
 
-func ListTargetGroups(opt config.AlbListCmdOptions) error {
+func AlbTglist(opt option.AlbTglistCmdOptions) error {
     awsConfig := aws.Config{}
     if opt.Region != "" {
         awsConfig.WithRegion(opt.Region)
