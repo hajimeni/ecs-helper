@@ -1,7 +1,5 @@
-version: '2'
+version: '3'
 
 services:
   web:
-    image: ${NGINX_IMAGE_NAME}
-    cpu_shares: 64
-    mem_reservation: 67108864
+    image: nginx

@@ -1,9 +1,0 @@
-version: '2'
-
-services:
-  web:
-    image: ${NGINX_IMAGE_NAME}
-    cpu_shares: 128
-    mem_reservation: 67108864
-    ports:
-      - 80

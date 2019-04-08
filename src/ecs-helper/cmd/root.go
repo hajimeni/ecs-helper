@@ -2,36 +2,44 @@ package cmd
 
 import (
     "github.com/spf13/cobra"
-    "ecs-helper/wrapper"
-    "ecs-helper/config"
+    "os"
 )
 
-var (
-    cmdOpts = &config.CmdOptions{}
-)
+func NewCmdRoot() *cobra.Command {
+    cmd := &cobra.Command{
+        Use: "ecs-helper",
+        Short: "ecs-cli simple command wrapper",
+        Run: runHelp,
+    }
+    cobra.OnInitialize(initConfig)
 
-var RootCmd = &cobra.Command{
-     Use: "ecs-helper",
-     Short: "",
-     Long: "",
-     Run: func(cmd *cobra.Command, args []string) {},
+    cmd.AddCommand(NewCmdService())
+    cmd.AddCommand(NewCmdEcsCli())
+    cmd.AddCommand(NewCmdTask())
+    cmd.AddCommand(NewCmdEcr())
+    cmd.AddCommand(NewCmdAlb())
+    cmd.AddCommand(NewCmdGetLogin())
+    cmd.AddCommand(NewCmdRole())
+
+    return cmd
 }
 
-func init() {
-    cobra.OnInitialize()
+func Execute() {
+    cmd := NewCmdRoot()
+    cmd.SetOutput(os.Stdout)
+    if err := cmd.Execute(); err != nil {
+        cmd.SetOutput(os.Stderr)
+        cmd.Println(err)
+        os.Exit(1)
+    }
 
-    RootCmd.PersistentFlags().BoolVar(&cmdOpts.Verbose, "verbose", false,"")
-    RootCmd.PersistentFlags().BoolVar(&cmdOpts.Verbose, "debug", false,"")
-
-    RootCmd.AddCommand(ecsCliCmd)
 }
 
-var ecsCliCmd = &cobra.Command{
-    Use: "cli",
-    DisableFlagParsing: true,
-    Short: "",
-    Long: "",
-    Run: func(cmd *cobra.Command, args []string) {
-        wrapper.ExecuteEcsCli(args)
-    },
+func initConfig() {
+    // pass
+}
+
+
+func runHelp(cmd *cobra.Command, args []string) {
+    _ = cmd.Help()
 }
